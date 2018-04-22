@@ -3,6 +3,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import * as io from 'socket.io-client';
 
 import { GroupService, UserService } from '../../shared';
+import { environment } from '../../../environments/environment';
 
 @Component({
     selector: 'group-chat',
@@ -10,7 +11,7 @@ import { GroupService, UserService } from '../../shared';
     styleUrls: ['./group-chat.component.css']
 })
 export class GroupChatComponent {
-    url = 'http://localhost:8080';
+    url = environment.api_url;
     socket = null;
 
     user = this.userService.getAuthenticatedUser();
