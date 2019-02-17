@@ -1,29 +1,29 @@
 module.exports = {
   "development": {
     "username": "root",
-    "password": "root",
+    "password": "Calvin_0823",
     "database": "test",
     "host": "localhost",
 	"storage": "database_dev.sqlite",
-    //"dialect": "sqlite"
-      "dialect": "mysql"
+    "dialect": "sqlite"
+     // "dialect": "mysql"
   },
   "test": {
-    "username": "bd8fdea224eabf",
-    "password": "94b5a7d3",
-    "database": "database_dev",
-    "host": "us-cdbr-azure-east2-d.cloudapp.net",
+    "username": "root",
+    "password": "Calvin_0823",
+    "database": "test",
+    "host": "localhost",
     "storage": "database_dev.sqlite",
-      //"dialect": "sqlite"
-      "dialect": "mysql"
+      "dialect": "sqlite"
+     // "dialect": "mysql"
   },
   "production": {
-    "username": "bd8fdea224eabf",
-    "password": "94b5a7d3",
-    "database": "database_dev",
-    "host": "us-cdbr-azure-east2-d.cloudapp.net",
+    "username": "root",
+    "password": "Calvin_0823",
+    "database": "test",
+    "host": "localhost",
     "storage": "database_dev.sqlite",
-      //"dialect": "sqlite"
-      "dialect": "mysql"
+      "dialect": "sqlite"
+      //"dialect": "mysql"
   }
 };
