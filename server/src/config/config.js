@@ -1,29 +1,29 @@
 module.exports = {
   "development": {
-    "username": "root",
-    "password": "Calvin_0823",
-    "database": "test",
-    "host": "localhost",
-	"storage": "database_dev.sqlite",
-    "dialect": "sqlite"
-     // "dialect": "mysql"
+    "username": "b729146b881877",
+    "password": "8b1d1c8b",
+    "database": "heroku_2f1b59704635635",
+    "host": "us-cdbr-iron-east-03.cleardb.net",
+	"storage": "heroku_2f1b59704635635.sqlite",
+    //"dialect": "sqlite"
+    "dialect": "mysql"
   },
   "test": {
-    "username": "root",
-    "password": "Calvin_0823",
-    "database": "test",
-    "host": "localhost",
-    "storage": "database_dev.sqlite",
-      "dialect": "sqlite"
-     // "dialect": "mysql"
+    "username": "b729146b881877",
+    "password": "8b1d1c8b",
+    "database": "heroku_2f1b59704635635",
+    "host": "us-cdbr-iron-east-03.cleardb.net",
+    "storage": "heroku_2f1b59704635635.sqlite",
+    //  "dialect": "sqlite"
+      "dialect": "mysql"
   },
   "production": {
-    "username": "root",
-    "password": "Calvin_0823",
-    "database": "test",
-    "host": "localhost",
-    "storage": "database_dev.sqlite",
-      "dialect": "sqlite"
-      //"dialect": "mysql"
+    "username": "b729146b881877",
+    "password": "8b1d1c8b",
+    "database": "heroku_2f1b59704635635",
+    "host": "us-cdbr-iron-east-03.cleardb.net",
+    "storage": "heroku_2f1b59704635635.sqlite",
+      //"dialect": "sqlite"
+      "dialect": "mysql"
   }
 };
