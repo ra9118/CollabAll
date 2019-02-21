@@ -4,7 +4,7 @@
   "description": "Group Meeting Collaboration Application",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no tests are specified\" && exit 1"
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
