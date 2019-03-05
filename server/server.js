@@ -38,15 +38,15 @@ app.use(methodOverride('X-HTTP-Method-Override'));
 app.use(express.static(__dirname + '/client'));
 
 // Use the passport package in our application
-require(__dirname + '/server/config/passport')(passport);
+require(__dirname + '/src/config/passport')(passport);
 app.use(passport.initialize());
 
 
 //Set up the api endpoints
-require(__dirname + '/server/services/index').init(express, app);
+require(__dirname + '/src/services/index').init(express, app);
 
 // --- Sequelize ---
-require(__dirname + '/server/models/index');
+require(__dirname + '/src/models/index');
 
 app.get('*', function(req, res) {
     res.sendfile(__dirname + '/client/index.html');
