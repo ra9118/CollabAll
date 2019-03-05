@@ -34,18 +34,24 @@ app.use(methodOverride('X-HTTP-Method-Override'));
 // routes ==================================================
 //require('./app/routes')(app); // configure our routes
 
-// CORS
-app.use(cors());
+// set the static files location /public/img will be /img for users
+app.use(express.static(__dirname + '/client'));
 
 // Use the passport package in our application
-require(__dirname + '/src/config/passport')(passport);
+require(__dirname + '/server/config/passport')(passport);
 app.use(passport.initialize());
 
+
 //Set up the api endpoints
-require(__dirname + '/src/services/index').init(express, app);
+require(__dirname + '/server/services/index').init(express, app);
 
 // --- Sequelize ---
-require(__dirname + '/src/models/index');
+require(__dirname + '/server/models/index');
+
+app.get('*', function(req, res) {
+    res.sendfile(__dirname + '/client/index.html');
+});
+
 
 global.clients = {};
 io.on('connection', function(socket){
@@ -75,11 +81,6 @@ io.on('connection', function(socket){
     socket.on('disconnect', function(){
         console.log( socket.name + ' has disconnected from the chat.' + socket.id);
     });
-
-    socket.on('chat', function (message) {
-        console.log(message);
-        socket.broadcast.in(message.groupID).emit('new_message', message);
-    });
 });
 
 // start app ===============================================
@@ -91,15 +92,3 @@ console.log('Magic happens on port ' + port);
 
 // expose app           
 exports = module.exports = http;
-
-
- if (process.env.NODE_ENV === 'production') {
-  // Exprees will serve up production assets
-  app.use(express.static('CollabAll/server' ));
-
-  // Express serve up index.html file if it doesn't recognize route
-  const path = require('path');
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'CollabAll', 'server', 'index.html'));
-  });
-}
