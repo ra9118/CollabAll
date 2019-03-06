@@ -49,7 +49,7 @@ require(__dirname + '/src/services/index').init(express, app);
 require(__dirname + '/src/models/index');
 
 app.get('*', function(req, res) {
-    res.sendfile(__dirname + '/index.html');
+    res.sendfile(__dirname + '/index1.html');
 });
 
 
