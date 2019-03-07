@@ -1,0 +1,71 @@
+/* You can add global styles to this file, and also import other style files */
+
+body {
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background-color: #ecf0f1;
+    color: #111;
+}
+
+.breadcrumb {
+    background-color: white;
+    border-radius: 0;
+    border-bottom: 1px solid #dae2e4;
+    color: #111;
+}
+
+.breadcrumb-item.active {
+    color: #22292d;
+}
+
+.btn-no-borders {
+    border-radius: 0;
+    border: 0;
+}
+
+.btn-primary {
+    background-color: #3ca2e0;
+}
+
+.btn-primary:hover {
+    background-color: #3192cd;
+}
+
+.btn-primary:not([disabled]):not(.disabled):active, .btn-primary:not([disabled]):not(.disabled).active, .show > .btn-primary.dropdown-toggle {
+    background-color: #3083af;
+}
+
+.alert {
+    border-radius: 0;
+}
+
+.card {
+    border-radius: 0;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 1px solid #dae2e4;
+}
+
+.icon-text {
+    display: block;
+    font-size: 14px;
+}
+
+.icon-button {
+    border: 0;
+    background: transparent;
+    color: #5a5a5a;
+    cursor: pointer;
+}
+
+.icon-button:hover {
+    color: #3192cd;
+}
+
+.icon-button:active {
+    color: #3083af;
+}
+
+.no-pointer {
+    cursor: default !important;
+}

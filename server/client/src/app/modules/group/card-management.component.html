@@ -1,0 +1,49 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a [routerLink]="['/']">Home</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a [routerLink]="['/', 'group', groupID, 'cards']">{{ group.Name }} - Group Cards</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+    </ol>
+</nav>
+
+<div class="alert" [ngClass]='{"alert-success": alert.success, "alert-warning": alert.failure }' *ngIf='alert.message.length > 0'>
+    {{ alert.message }}
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{ group.Name }} - Group Cards: {{ title }}</h5>
+
+        <form (ngSubmit)="saveCard()">
+            <div class="form-group">
+                <label for="cardTitle">Card Title</label>
+                <input type="text" class="form-control input-lg" name="cardTitle" [(ngModel)]="cardTitle" placeholder="Card Title" required>
+            </div>
+
+            <div class="form-group">
+                <label for="cardDescription">Card Description</label>
+                <textarea name="cardDescription" class="form-control input-lg" [(ngModel)]="cardDescription" placeholder="Description" style="height:150px"
+                    required></textarea>
+            </div>
+
+            <div class="form-group" *ngFor="let error of validation">
+                <label class="control-label">{{error}}</label>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <a [routerLink]="['/', 'group', groupID, 'cards']">
+                        <button class="btn btn-primary btn-no-borders">Cancel</button>
+                    </a>
+                </div>
+                <div class="col text-right">
+                    <button type="submit" class="btn btn-primary btn-no-borders">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
