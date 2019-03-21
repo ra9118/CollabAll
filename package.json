@@ -3,15 +3,8 @@
   "version": "1.0.0",
   "description": "Group Meeting Collaboration Application",
   "main": "server.js",
-  "scripts": {
-     "ng": "ng",
+  "scripts": {   
     "start": "node server/server.js",
-    "build": "ng build",
-    "test": "ng test",
-    "lint": "ng lint",
-    "e2e": "ng e2e",
-    "preinstall": "npm install -g angular/cli",
-    "heroku-postbuild": "ng build --prod"
   },
   "repository": {
     "type": "git",
