@@ -4,7 +4,12 @@
   "description": "Group Meeting Collaboration Application",
   "main": "server.js",
   "scripts": {
-    "start": "node server/server.js"
+     "ng": "ng",
+    "start": "node server/server.js",
+    "build": "ng build --prod",
+    "test": "ng test",
+    "lint": "ng lint",
+    "e2e": "ng e2e"
   },
   "repository": {
     "type": "git",
