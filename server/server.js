@@ -35,7 +35,7 @@ app.use(methodOverride('X-HTTP-Method-Override'));
 //require('./app/routes')(app); // configure our routes
 
 // set the static files location /public/img will be /img for users
-app.use(express.static(__dirname + '/client'));
+app.use(express.static(__dirname + '/client/dist'));
 
 // Use the passport package in our application
 require(__dirname + '/src/config/passport')(passport);
@@ -49,7 +49,7 @@ require(__dirname + '/src/services/index').init(express, app);
 require(__dirname + '/src/models/index');
 
 app.get('*', function(req, res) {
-    res.sendfile(__dirname + '/client/src/index.html');
+    res.sendfile(__dirname + '/client/dist/index.html');
 });
 
 
