@@ -16,7 +16,9 @@ export class GroupChatComponent {
 
     user = this.userService.getAuthenticatedUser();
 
-    group = {};
+    group = {
+        Name: ''
+    };
     groupID = 0;
     groupUsers = [];
     groupCards = [];

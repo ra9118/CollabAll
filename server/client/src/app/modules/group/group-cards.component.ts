@@ -10,7 +10,9 @@ import { GroupService, UserService } from '../../shared';
 })
 export class GroupCardsComponent {
     user = this.userService.getAuthenticatedUser();
-    group = {};
+    group = {
+        Name: ''
+    };
     groupID = 0;
     cards = [];
     cardSplices = [];

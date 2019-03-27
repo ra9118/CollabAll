@@ -11,7 +11,9 @@ import { GroupService, UserService } from '../../shared';
 })
 export class InterjectionManagementComponent {
     user = this.userService.getAuthenticatedUser();
-    group = {};
+    group = {
+        Name: ''
+    };
     groupID = 0;
     interjectionID = '';
     interjectionTitle = '';
