@@ -32,11 +32,11 @@
     "open-iconic": "^1.1.1",
     "rxjs": "^5.5.6",
     "socket.io": "^2.0.4",
-    "zone.js": "^0.8.19"
-  },
-  "devDependencies": {
+    "zone.js": "^0.8.19",
     "@angular/cli": "~1.7.3",
     "@angular/compiler-cli": "^5.2.0",
+  },
+  "devDependencies": {
     "@angular/language-service": "^5.2.0",
     "@types/jasmine": "~2.8.3",
     "@types/jasminewd2": "~2.0.2",
