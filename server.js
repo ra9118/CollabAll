@@ -55,7 +55,7 @@ app.get('*', function(req, res) {
 
 global.clients = {};
 io.on('connection', function(socket){
-
+    console.log('Connected')
     socket.on('join', function (id) {
         socket.name = id;
         console.log(socket.name + ' joined!');
@@ -72,6 +72,11 @@ io.on('connection', function(socket){
         socket.leave(group.group);
         socket.disconnect();
     });
+
+    socket.on('chat', message => {
+        console.log(`chat recieved ${message}`)
+        socket.broadcast.in(message.groupID).emit('new_message', message)
+    })
 
     socket.on('deviceTilt', function (deviceOrientation) {
         console.log(socket.name + ' : '+ deviceOrientation.deviceOrientation);
