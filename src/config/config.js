@@ -22,7 +22,7 @@ module.exports = {
     "database": "dugfouar2nq21",
     "username": "mwiffgsanagrso",
     "port": "5432",
-    "password": "8b1d1c8b",
+    "password": "638cf6dc2b2bbda075d4fdbd13622bde64b7e96c1a2a8afd934b6e5fc29edafd",
     "uri": "postgres://mwiffgsanagrso:638cf6dc2b2bbda075d4fdbd13622bde64b7e96c1a2a8afd934b6e5fc29edafd@ec2-54-225-95-183.compute-1.amazonaws.com:5432/dugfouar2nq21",
       //"dialect": "sqlite"
     "dialect": "postgres"
