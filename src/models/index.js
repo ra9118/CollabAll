@@ -53,7 +53,10 @@ db.sequelize
                     {Name: 'Faculty', FriendlyName: 'Faculty', IsActive:true},
                     {Name: 'Captionist', FriendlyName: 'Captionist', IsActive:true},
                     {Name: 'Interpreter', FriendlyName: 'Interpreter', IsActive:true}
-                ], options); 
+                ], options).then(done => {
+                    console.log(`Data after bulkCreate: ${done}`)
+                    return done
+                }); 
             }, function (err) {
                 console.log('An error occurred while creating the table:', err);
             });
