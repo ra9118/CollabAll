@@ -23,7 +23,12 @@ export class GroupChatComponent {
     groupUsers = [];
     groupCards = [];
     groupInterjections = [];
-
+    recording = {
+        available: false,
+        recognitionService: null,
+        started: false,
+        chatPlaceholder: 'chat'
+    }
     messages = [];
     currentCommunicator = 'None';
     currentCard = 'None';
@@ -45,8 +50,15 @@ export class GroupChatComponent {
     ) { }
 
     ngOnInit() {
+        if(window.webkitSpeechRecognition) {
+            this.recording.available = true;
+            this.recording.recognitionService = new window.webkitSpeechRecognition()
+            this.recording.started = false;
+        }
+        else{
+            this.recording.available = false
+        }
         this.groupID = this.route.snapshot.params['id'];
-
         this.groupService.getGroupMembers(this.groupID)
             .subscribe(
                 data => {
@@ -108,6 +120,46 @@ export class GroupChatComponent {
         });
     }
 
+    addToPlaceholder(text: string) {
+        this.recording.chatPlaceholder = text
+    }
+
+    startStt(){
+        if(this.recording.available) {
+            this.recording.recognitionService.continuous = true
+            this.recording.recognitionService.interimResults = true
+            this.recording.recognitionService.onaudiostart = (start) => {
+                console.log('started recording')
+            }
+
+            this.recording.recognitionService.onspeechend = () => {
+                if(this.recording.started){
+                    this.recording.recognitionService.stop();
+                    this.recording.recognitionService.start()
+                }
+                else{
+                    this.recording.recognitionService.stop();
+                }
+            }
+
+            this.recording.recognitionService.onerror = (error) => {
+                console.log('Error, ', error)
+            }
+
+            this.recording.recognitionService.onresult = (event) => {
+                if(event.results[event.results.length - 1].isFinal){
+                    this.sendStt(event.results[event.results.length - 1][0].transcript)
+                }
+                else{
+                    console.log(event.results[event.results.length - 1][0].transcript)
+                }
+            }
+        }
+        this.recording.recognitionService.start()
+        this.recording.started = true
+        console.log('stt starts here')
+    }
+
     ngOnDestroy() {
         this.socket.emit('unsubscribe', { group: this.groupID });
     }
@@ -153,6 +205,17 @@ export class GroupChatComponent {
 
         this.appendChat(action);
         this.emitChat(action);
+    }
+
+    sendStt(message: string) {
+        let action = {
+            body: message,
+            user: `${this.user.FirstName} ${this.user.LastName}`,
+            userAvatar: this.user.Avatar,
+            groupID: this.groupID
+        }
+        this.appendChat(action)
+        this.emitChat(action)
     }
 
     sendMessage() {
