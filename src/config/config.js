@@ -18,13 +18,11 @@ module.exports = {
       "dialect": "mysql"
   },
   "production": {
-    "host": "ec2-54-225-95-183.compute-1.amazonaws.com",
-    "database": "dugfouar2nq21",
-    "username": "mwiffgsanagrso",
-    "port": "5432",
-    "password": "638cf6dc2b2bbda075d4fdbd13622bde64b7e96c1a2a8afd934b6e5fc29edafd",
-    "uri": "postgres://mwiffgsanagrso:638cf6dc2b2bbda075d4fdbd13622bde64b7e96c1a2a8afd934b6e5fc29edafd@ec2-54-225-95-183.compute-1.amazonaws.com:5432/dugfouar2nq21",
+    "host": "us-cdbr-iron-east-03.cleardb.net",
+    "database": "heroku_b478ec93b2ecb09",
+    "username": "b8ac83f9172225",
+    "password": "5938c801",
       //"dialect": "sqlite"
-    "dialect": "postgres"
+    "dialect": "mysql"
   }
 };
