@@ -125,6 +125,11 @@ export class GroupChatComponent {
     }
 
     startStt(){
+        if(this.recording.available && this.recording.started){
+            this.recording.recognitionService.stop();
+            this.recording.started = false;
+            return
+        }
         if(this.recording.available) {
             this.recording.recognitionService.continuous = true
             this.recording.recognitionService.interimResults = true
@@ -135,7 +140,7 @@ export class GroupChatComponent {
             this.recording.recognitionService.onspeechend = () => {
                 if(this.recording.started){
                     this.recording.recognitionService.stop();
-                    this.recording.recognitionService.start()
+                    this.recording.started = false;
                 }
                 else{
                     this.recording.recognitionService.stop();

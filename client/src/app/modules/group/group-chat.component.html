@@ -59,8 +59,8 @@
                         <form (ngSubmit)="sendMessage()">
                             <div class="input-group">
                                 <!-- Start of STT -->
-                                <div *ngIf='recording.available' class='recorder' (click)="startStt()" ngbTooltip="Click here to send your voice as text">
-                                    <fa class='recorder-icon' name='microphone' size='1'></fa>
+                                <div *ngIf='recording.available' class='recorder' [class]='recording.started ? "recorder recording" : "recorder"' (click)="startStt()" [ngbTooltip]="recording.started ? 'Stop' : 'Click here to send your voice as text'">
+                                    <fa [class]='recording.started ? "recorder-icon icon-recording" : "recorder-icon"' [name]='recording.started ? "stop" :  "microphone"' size='1'></fa>
                                 </div>
                                 <div *ngIf='!recording.available' class='recorder' ngbTooltip="Speech recognition is only available on Chrome">
                                     <fa class='recorder-icon' name='microphone-slash' size='1'></fa>
