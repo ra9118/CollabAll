@@ -19,9 +19,9 @@ module.exports = {
   },
   "production": {
     "host": "us-cdbr-iron-east-03.cleardb.net",
-    "database": "gcp_ae7d63f4a90d0b57734d",
-    "username": "b4a4c09af21488",
-    "password": "2805a04a",
+    "database": "heroku_b478ec93b2ecb09",
+    "username": "b8ac83f9172225",
+    "password": "5938c801",
       //"dialect": "sqlite"
     "dialect": "mysql"
   }
