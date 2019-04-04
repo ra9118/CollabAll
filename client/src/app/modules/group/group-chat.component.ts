@@ -50,9 +50,9 @@ export class GroupChatComponent {
     ) { }
 
     ngOnInit() {
-        if(window.webkitSpeechRecognition) {
+        if((<any>window).webkitSpeechRecognition) {
             this.recording.available = true;
-            this.recording.recognitionService = new window.webkitSpeechRecognition()
+            this.recording.recognitionService = new (<any>window).webkitSpeechRecognition()
             this.recording.started = false;
         }
         else{
