@@ -1,6 +1,7 @@
 import { Component, group } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import * as io from 'socket.io-client';
+import * as moment from 'moment';
 
 import { GroupService, UserService } from '../../shared';
 import { environment } from '../../../environments/environment';
@@ -39,6 +40,8 @@ export class GroupChatComponent {
         BackgroundColor: "#449d44",
         TextColor: "#ffffff"
     };
+
+    timeStampFormat = 'MM-DD-YY hh:mm:ss';
 
     chatMessage = '';
 
@@ -181,9 +184,6 @@ export class GroupChatComponent {
         } else {
             sound = document.getElementById(message.body.Sound);
         }
-
-        console.log(message.body.Sound);
-
         this.messages.push(message);
 
         if (message.body.includes === undefined && message.body.Title === 'Communicating!') {
@@ -205,7 +205,8 @@ export class GroupChatComponent {
             body: interjection,
             user: this.user.FirstName + ' ' + this.user.LastName,
             userAvatar: this.user.Avatar,
-            groupID: this.groupID
+            groupID: this.groupID,
+            timestamp: moment(moment.now()).format(this.timeStampFormat)
         };
 
         this.appendChat(action);
@@ -217,7 +218,8 @@ export class GroupChatComponent {
             body: message,
             user: `${this.user.FirstName} ${this.user.LastName}`,
             userAvatar: this.user.Avatar,
-            groupID: this.groupID
+            groupID: this.groupID,
+            timestamp: moment(moment.now()).format(this.timeStampFormat)
         }
         this.appendChat(action)
         this.emitChat(action)
@@ -229,7 +231,8 @@ export class GroupChatComponent {
                 body: this.chatMessage,
                 user: this.user.FirstName + ' ' + this.user.LastName,
                 userAvatar: this.user.Avatar,
-                groupID: this.groupID
+                groupID: this.groupID,
+                timestamp: moment(moment.now()).format(this.timeStampFormat)
             };
 
             this.appendChat(action);
@@ -243,7 +246,8 @@ export class GroupChatComponent {
             body: 'Communicating!',
             user: this.user.FirstName + ' ' + this.user.LastName,
             userAvatar: this.user.Avatar,
-            groupID: this.groupID
+            groupID: this.groupID,
+            timestamp: moment(moment.now()).format(this.timeStampFormat)
         };
 
         this.appendChat(action);
@@ -259,7 +263,8 @@ export class GroupChatComponent {
             body: 'Discussing: ' + result.Title,
             user: this.user.FirstName + ' ' + this.user.LastName,
             userAvatar: this.user.Avatar,
-            groupID: this.groupID
+            groupID: this.groupID,
+            timestamp: moment(moment.now()).format(this.timeStampFormat)
         };
 
         this.appendChat(action);
@@ -288,7 +293,8 @@ export class GroupChatComponent {
             body: result,
             user: this.user.FirstName + ' ' + this.user.LastName,
             userAvatar: this.user.Avatar,
-            groupID: this.groupID
+            groupID: this.groupID,
+            timestamp: moment(moment.now()).format(this.timeStampFormat)
         };
 
         this.appendChat(action);

@@ -100,3 +100,10 @@
 .recorder:hover .recorder-icon {
     color: white;
 }
+
+.timestamp {
+    font-size: 0.7rem;
+    float: right;
+    color: #a29191;
+    font-style: italic;
+}
