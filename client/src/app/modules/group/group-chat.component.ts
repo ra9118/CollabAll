@@ -35,8 +35,8 @@ export class GroupChatComponent {
     currentCard = 'None';
 
     communicateInterjection = {
-        Title: "Communicating!",
-        Icon: "fa fa-microphone",
+        Title: "Speaking!",
+        Icon: "fa fa-commenting-o",
         BackgroundColor: "#449d44",
         TextColor: "#ffffff"
     };
@@ -179,14 +179,14 @@ export class GroupChatComponent {
     appendChat(message) {
         let sound;
 
-        if (message.body.Title === 'Communicating!') {
+        if (message.body.Title === 'Speaking!') {
             sound = document.getElementById('button-09');
         } else {
             sound = document.getElementById(message.body.Sound);
         }
         this.messages.push(message);
 
-        if (message.body.includes === undefined && message.body.Title === 'Communicating!') {
+        if (message.body.includes === undefined && message.body.Title === 'Speaking!') {
             this.currentCommunicator = message.user;
         }
 
@@ -243,7 +243,7 @@ export class GroupChatComponent {
 
     communicate() {
         let action = {
-            body: 'Communicating!',
+            body: 'Speaking!',
             user: this.user.FirstName + ' ' + this.user.LastName,
             userAvatar: this.user.Avatar,
             groupID: this.groupID,
