@@ -35,7 +35,7 @@ export class GroupChatComponent {
     currentCard = 'None';
 
     communicateInterjection = {
-        Title: "Speaking!",
+        Title: "Communicating!",
         Icon: "fa fa-commenting-o",
         BackgroundColor: "#449d44",
         TextColor: "#ffffff"
@@ -179,14 +179,14 @@ export class GroupChatComponent {
     appendChat(message) {
         let sound;
 
-        if (message.body.Title === 'Speaking!') {
+        if (message.body.Title === 'Communicating!') {
             sound = document.getElementById('button-09');
         } else {
             sound = document.getElementById(message.body.Sound);
         }
         this.messages.push(message);
 
-        if (message.body.includes === undefined && message.body.Title === 'Speaking!') {
+        if (message.body.includes === undefined && message.body.Title === 'Communicating!') {
             this.currentCommunicator = message.user;
         }
 
@@ -243,7 +243,7 @@ export class GroupChatComponent {
 
     communicate() {
         let action = {
-            body: 'Speaking!',
+            body: 'Communicating!',
             user: this.user.FirstName + ' ' + this.user.LastName,
             userAvatar: this.user.Avatar,
             groupID: this.groupID,
@@ -286,6 +286,9 @@ export class GroupChatComponent {
                 break;
             case '4':
                 result = 'Don\'t Understand!';
+                break;
+            case '5':
+                result = 'Done Communicating!';
                 break;
         }
 
