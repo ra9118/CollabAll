@@ -36,8 +36,8 @@ export class GroupChatComponent {
 
     communicateInterjection = {
         Title: "Communicating!",
-        Icon: "fa fa-commenting-o",
-        BackgroundColor: "#449d44",
+        Icon: "fa fa-volume-up",
+        BackgroundColor: "#F1948A",
         TextColor: "#ffffff"
     };
 
@@ -286,9 +286,6 @@ export class GroupChatComponent {
                 break;
             case '4':
                 result = 'Don\'t Understand!';
-                break;
-            case '5':
-                result = 'Done Communicating!';
                 break;
         }
 
