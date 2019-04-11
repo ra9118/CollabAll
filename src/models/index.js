@@ -1,0 +1,72 @@
+(function () {
+'use strict';
+
+var fs = require('fs');
+var path = require('path');
+var Sequelize = require('sequelize');
+var basename = path.basename(module.filename);
+var env = process.env.NODE_ENV || 'development';
+var config = require(__dirname + '/../config/config.js')[env];
+var db = {};
+
+if (config.use_env_variable) {
+    var sequelize = new Sequelize(process.env[config.use_env_variable]);
+} else {
+    var sequelize = new Sequelize(config.database, config.username, config.password, config);
+}
+
+fs
+    .readdirSync(__dirname)
+    .filter(function (file) {
+        return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
+    })
+    .forEach(function (file) {
+        var model = sequelize['import'](path.join(__dirname, file));
+        db[model.name] = model;
+    });
+
+Object.keys(db).forEach(function (modelName) {
+    if (db[modelName].associate) {
+        db[modelName].associate(db);
+    }
+});
+
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
+
+//Needs this in order to run correctly if the rows had already been created.
+var options = [];
+options.ignoreDuplicates = true;
+
+db.sequelize
+    .authenticate()
+    .then(function () {
+        console.log('Connection successful');
+        db.sequelize
+        .sync()
+           // .sync({force: true})
+            .then(function () {
+                console.log('Tables Created');
+                var RoleModel = db.role;
+                return RoleModel.bulkCreate([
+                    {Name: 'Student', FriendlyName: 'Student', IsActive:true},
+                    {Name: 'Faculty', FriendlyName: 'Faculty', IsActive:true},
+                    {Name: 'Captionist', FriendlyName: 'Captionist', IsActive:true},
+                    {Name: 'Interpreter', FriendlyName: 'Interpreter', IsActive:true}
+                ], options).then(done => {
+                    console.log(`Data after bulkCreate: ${done}`)
+                    return done
+                }); 
+            }, function (err) {
+                console.log('An error occurred while creating the table:', err);
+            });
+
+    })
+    .catch(function (error) {
+        console.log("Error creating connection:", error);
+    });
+
+module.exports = db;
+
+}());
+    

@@ -1,0 +1,109 @@
+.messages {
+    overflow-y: scroll;
+    height: 300px;
+}
+
+.message-group {
+    display: flex;
+    padding: 10px 0;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.message-group:first-of-type {
+    border-top: none;
+}
+
+.avatar {
+    margin-top: 5px;
+    margin-right: 10px;
+    width: 40px;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.message {
+    flex: 1;
+    min-width: 0;
+}
+
+.message-icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 5px;
+    padding-top: 2px;
+    text-align: center;
+    display: inline-block;
+    border-radius: 15px;
+}
+
+.hide-overflow {
+    overflow: hidden;
+}
+
+.users {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.users .list-group {
+    overflow-y: scroll;
+    height: 304px;
+}
+
+.recorder {
+    margin: 0 auto; 
+    width: 50px; 
+    height: 50px; 
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    transition: all .3s ease-in-out;
+    cursor: pointer;
+}
+
+.recording {
+    background: red;
+    border-radius: 30px;
+    animation-name: pulse;
+	animation-duration: 1.5s;
+	animation-iteration-count: infinite;
+	animation-timing-function: linear;
+}
+
+@keyframes pulse{
+	0%{
+		box-shadow: 0px 0px 5px 0px rgba(173,0,0,.3);
+	}
+	65%{
+		box-shadow: 0px 0px 5px 13px rgba(173,0,0,.3);
+	}
+	90%{
+		box-shadow: 0px 0px 5px 13px rgba(173,0,0,0);
+	}
+}
+
+.icon-recording {
+    color: white !important;
+}
+
+.recorder:hover {
+    background: red;
+    border-radius: 30px;
+}
+
+.recorder-icon{
+    color: black;
+    transition: all .3s ease-in-out;
+}
+
+.recorder:hover .recorder-icon {
+    color: white;
+}
+
+.timestamp {
+    font-size: 0.7rem;
+    float: right;
+    color: #a29191;
+    font-style: italic;
+}
