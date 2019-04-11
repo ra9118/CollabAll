@@ -36,8 +36,8 @@ export class GroupChatComponent {
 
     communicateInterjection = {
         Title: "Communicating!",
-        Icon: "fa fa-microphone",
-        BackgroundColor: "#449d44",
+        Icon: "fa fa-volume-up",
+        BackgroundColor: "#F1948A",
         TextColor: "#ffffff"
     };
 
