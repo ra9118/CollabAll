@@ -30,7 +30,7 @@ export class GroupChatComponent {
 
     communicateInterjection = {
         Title: "Communicating!",
-        Icon: "fa fa-volume-up",
+        Icon: "fa fa-commenting-o",
         BackgroundColor: "#F1948A",
         TextColor: "#ffffff"
     };

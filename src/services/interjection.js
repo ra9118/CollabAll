@@ -50,7 +50,7 @@
                 var groupId = request.body.GroupId;
                 return GroupInterjectionModel.bulkCreate([
                     {groupID:groupId, Position:0, Title: 'Slow Down!', Description: 'Slow Down!', Icon:'fa fa-stop', BackgroundColor:'#5bc0de',TextColor:'#fff',IncludeCaptionist:true,IncludeInterpreter:true,IsActive:true,Sound:'beep-07'},
-                    {groupID:groupId, Position:1, Title: 'Done Communicating!', Description: 'Done Communicating!', Icon:'fa fa-volume-off', BackgroundColor:'#BF5FFF',TextColor:'#fff',IncludeCaptionist:true,IncludeInterpreter:true,IsActive:true,Sound:'beep-07'},
+                    {groupID:groupId, Position:1, Title: 'Done Communicating!', Description: 'Done Communicating!', Icon:'fa fa-thumbs-o-up', BackgroundColor:'#BF5FFF',TextColor:'#fff',IncludeCaptionist:true,IncludeInterpreter:true,IsActive:true,Sound:'beep-07'},
                     {groupID:groupId, Position:2, Title: 'Question!', Description: 'Question!', Icon:'fa fa-question', BackgroundColor:'#f0ad4e',TextColor:'#fff',IncludeCaptionist:true,IncludeInterpreter:true,IsActive:true, Sound:'beep-07'},
                     {groupID:groupId, Position:3, Title: 'Repeat!', Description: 'Question!', Icon:'fa fa-repeat', BackgroundColor:'#3ca2e0',TextColor:'#fff',IncludeCaptionist:true,IncludeInterpreter:true,IsActive:true, Sound:'beep-07'},
                     {groupID:groupId, Position:4, Title: 'Don\'t Understand!', Description: 'Don\'t Understand!', Icon:'fa fa-exclamation', BackgroundColor:'#AEB6BF',TextColor:'#fff',IncludeCaptionist:true,IncludeInterpreter:true,IsActive:true, Sound:'beep-07'},
