@@ -3,6 +3,10 @@
 
     var db = require('../models/index');
 
+    var MessageModel = db.message;
+    var UserModel = db.user;
+    var GroupModel = db.group;
+
     var init = function (router) {
         router.get('/get-messages-by-group', endpoints.getMessagesByGroup);
         router.post('/send-message', endpoints.sendMessage);
@@ -11,27 +15,29 @@
     var endpoints = {
 
         getMessagesByGroup: function (request, response) {
-            // var groupId = request.query.GroupId;
-            // return MessageModel.findAll({
-            //     where: {
-            //         groupID: groupId
-            //     },
-            //     include: [MessageModel]
-            // }).then(function (data) {
-            //     response.send({success: true, groups: data});
-            // });
+            var groupId = request.query.groupID;
+            return MessageModel.findAll({
+                where: {
+                    groupID: groupId
+                },
+                include: [UserModel, GroupModel]
+            }).then(function (data) {
+                response.send({success: true, messages: data});
+            });
         },
 
         sendMessage: function (request, response) {
-            // var groupName = request.body.GroupName;
-            // var userIds = request.body.UserIds;
-            // return MessageModel.create({
-            //     Name: groupName,
-            //     IsActive: true
-            // }).then(function (data) {
-            //     updateGroupUsers(data.ID, userIds);
-            //     response.send({success: true, group: data});
-            // });
+            var groupId = request.body.groupID;
+            var userId = request.body.userID;
+            var body = request.body.body;
+            return MessageModel.create({
+                Body: body,
+                groupID: groupId,
+                userID: userId,
+                IsActive: true
+            }).then(function (data) {
+                response.send({success: true, message: data});
+            });
         },
     };
 
