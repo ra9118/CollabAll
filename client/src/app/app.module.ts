@@ -33,7 +33,8 @@ import {
   GroupService,
   JwtService,
   UserService,
-  HttpTokenInterceptor
+  HttpTokenInterceptor,
+  SpeechService
 } from './shared';
 
 @NgModule({
@@ -71,6 +72,7 @@ import {
     GroupService,
     JwtService,
     UserService,
+    SpeechService,
     HttpClientModule
   ],
   bootstrap: [AppComponent]

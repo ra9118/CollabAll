@@ -62,14 +62,14 @@
                         <form (ngSubmit)="sendMessage()">
                             <div class="input-group">
                                 <!-- Start of STT -->
-                                <div *ngIf='recording.available' class='recorder' [class]='recording.started ? "recorder recording" : "recorder"' (click)="startStt()" [ngbTooltip]="recording.started ? 'Stop' : 'Click here to send your voice as text'">
-                                    <fa [class]='recording.started ? "recorder-icon icon-recording" : "recorder-icon"' [name]='recording.started ? "stop" :  "microphone"' size='1'></fa>
+                                <div *ngIf='speechService.available' class='recorder' [class]='speechService.started ? "recorder recording" : "recorder"' (click)="startStt()" [ngbTooltip]="speechService.started ? 'Stop' : 'Click here to send your voice as text'">
+                                    <fa [class]='speechService.started ? "recorder-icon icon-recording" : "recorder-icon"' [name]='speechService.started ? "stop" :  "microphone"' size='1'></fa>
                                 </div>
-                                <div *ngIf='!recording.available' class='recorder' ngbTooltip="Speech recognition is only available on Chrome">
+                                <div *ngIf='!speechService.available' class='recorder' ngbTooltip="Speech recognition is only available on Chrome">
                                     <fa class='recorder-icon' name='microphone-slash' size='1'></fa>
                                 </div>
                                 <!-- End of STT -->
-                                <input type="text" class="form-control" [(ngModel)]="chatMessage" name="chatMessage" placeholder="{{recording.chatPlaceholder}}" autocomplete="on"
+                                <input type="text" class="form-control" [(ngModel)]="chatMessage" name="chatMessage" placeholder="{{speechService.chatPlaceholder}}" autocomplete="on"
                                 />
                                 <div class="input-group-append">
                                     <button class="btn btn-primary" type="submit">Send</button>
