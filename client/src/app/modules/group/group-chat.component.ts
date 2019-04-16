@@ -44,7 +44,7 @@ export class GroupChatComponent {
         private router: Router,
         private groupService: GroupService,
         private userService: UserService,
-        private speechService: SpeechService
+        public speechService: SpeechService
     ) { }
 
     ngOnInit() {
