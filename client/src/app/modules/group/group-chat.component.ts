@@ -3,7 +3,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import * as io from 'socket.io-client';
 import * as moment from 'moment';
 
-import { GroupService, UserService } from '../../shared';
+import { GroupService, UserService, SpeechService } from '../../shared';
 import { environment } from '../../../environments/environment';
 
 @Component({
@@ -24,12 +24,6 @@ export class GroupChatComponent {
     groupUsers = [];
     groupCards = [];
     groupInterjections = [];
-    recording = {
-        available: false,
-        recognitionService: null,
-        started: false,
-        chatPlaceholder: 'chat'
-    }
     messages = [];
     currentCommunicator = 'None';
     currentCard = 'None';
@@ -41,7 +35,7 @@ export class GroupChatComponent {
         TextColor: "#ffffff"
     };
 
-    timeStampFormat = 'MM-DD-YY hh:mm:ss';
+    timeStampFormat = 'MM-DD-YY HH:mm:ss';
 
     chatMessage = '';
 
@@ -49,18 +43,12 @@ export class GroupChatComponent {
         private route: ActivatedRoute,
         private router: Router,
         private groupService: GroupService,
-        private userService: UserService
+        private userService: UserService,
+        private speechService: SpeechService
     ) { }
 
     ngOnInit() {
-        if((<any>window).webkitSpeechRecognition) {
-            this.recording.available = true;
-            this.recording.recognitionService = new (<any>window).webkitSpeechRecognition()
-            this.recording.started = false;
-        }
-        else{
-            this.recording.available = false
-        }
+        this.speechService.checkAvailability()
         this.groupID = this.route.snapshot.params['id'];
         this.groupService.getGroupMembers(this.groupID)
             .subscribe(
@@ -123,52 +111,38 @@ export class GroupChatComponent {
         });
     }
 
-    addToPlaceholder(text: string) {
-        this.recording.chatPlaceholder = text
+
+    onResult = (event) => {
+        console.log(event)
+        if(event.results[event.results.length - 1].isFinal){
+            this.sendStt(event.results[event.results.length - 1][0].transcript)
+        }
+        else{
+            console.log(event.results[event.results.length - 1][0].transcript)
+        }
     }
 
     startStt(){
-        if(this.recording.available && this.recording.started){
-            this.recording.recognitionService.stop();
-            this.recording.started = false;
-            return
+        if(this.speechService.started){
+            this.speechService.DestroySpeechObject()
         }
-        if(this.recording.available) {
-            this.recording.recognitionService.continuous = true
-            this.recording.recognitionService.interimResults = true
-            this.recording.recognitionService.onaudiostart = (start) => {
-                console.log('started recording')
-            }
-
-            this.recording.recognitionService.onspeechend = () => {
-                if(this.recording.started){
-                    this.recording.recognitionService.stop();
-                    this.recording.started = false;
-                }
-                else{
-                    this.recording.recognitionService.stop();
-                }
-            }
-
-            this.recording.recognitionService.onerror = (error) => {
-                console.log('Error, ', error)
-            }
-
-            this.recording.recognitionService.onresult = (event) => {
-                if(event.results[event.results.length - 1].isFinal){
-                    this.sendStt(event.results[event.results.length - 1][0].transcript)
-                }
-                else{
-                    console.log(event.results[event.results.length - 1][0].transcript)
-                }
-            }
+        else {
+            this.speechService.record()
+            .subscribe(value => {
+                if(value)
+                    this.sendStt(value)
+            }, error => {
+                console.log(error)
+            }, () => {
+                console.log('done')
+            })
         }
-        this.recording.recognitionService.start()
-        this.recording.started = true
+
         console.log('stt starts here')
     }
 
     ngOnDestroy() {
+        this.speechService.DestroySpeechObject()
         this.socket.emit('unsubscribe', { group: this.groupID });
     }
 
