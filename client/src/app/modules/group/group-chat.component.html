@@ -69,10 +69,10 @@
                                     <fa class='recorder-icon' name='microphone-slash' size='1'></fa>
                                 </div>
                                 <!-- End of STT -->
-                                <input type="text" class="form-control" [(ngModel)]="chatMessage" name="chatMessage" placeholder="{{speechService.chatPlaceholder}}" autocomplete="on"
+                                <input type="text" class="form-control" [(ngModel)]="chatMessage" name="chatMessage" placeholder="{{speechService.chatPlaceholder}}" autocomplete="off" (focus)="speechService.started ? startStt() : null"
                                 />
                                 <div class="input-group-append">
-                                    <button class="btn btn-primary" type="submit">Send</button>
+                                    <button disabled="{{speechService.started}}" [class]="speechService.started ? 'btn btn-secondary': 'btn btn-primary'" type="submit">Send</button>
                                 </div>
                             </div>
                         </form>
