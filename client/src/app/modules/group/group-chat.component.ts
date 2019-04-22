@@ -314,4 +314,31 @@ export class GroupChatComponent {
 
         return (string.indexOf(substring) > -1);
     }
+
+    print(){
+      let popupWinindow;
+      popupWinindow = window.open('', '_blank', 'width=1000,height=700,scrollbars=no,menubar=no,toolbar=no,location=no,status=no,titlebar=no');
+          popupWinindow.document.open();
+
+          var messagesHtml = '';
+
+          this.messages.forEach(function(message) {
+            var tempHtml = `<div class="message">
+              <div><b>(${message.timestamp}) ${message.user}:</b></div>
+              <div><span>${message.body}</span></div>
+              <br/>
+            </div>`;
+            messagesHtml += tempHtml;
+          });
+
+
+          popupWinindow.document.write(
+            `<html>
+              <head></head>
+              <body onload="window.print()">
+                ${messagesHtml}
+              </body>
+            </html>`);
+          popupWinindow.document.close();
+    }
 }
