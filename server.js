@@ -46,7 +46,7 @@ app.use(passport.initialize());
 require(__dirname + '/src/services/index').init(express, app);
 
 // --- Sequelize ---
-require(__dirname + '/src/models/index');
+var db = require(__dirname + '/src/models/index');
 
 app.get('*', function(req, res) {
     res.sendfile(__dirname + '/client/dist/index.html');
@@ -75,6 +75,18 @@ io.on('connection', function(socket){
 
     socket.on('chat', message => {
         console.log(`chat recieved ${message}`)
+        // add to database
+        var MessageModel = db.message;
+
+        MessageModel.create({
+            Body: message.body,
+            groupID: message.groupID,
+            userID: message.userID,
+            IsActive: true
+        }).then(function (data) {
+            console.log(`MessageModel created ${message}`)
+        });
+
         socket.broadcast.in(message.groupID).emit('new_message', message)
     })
 
