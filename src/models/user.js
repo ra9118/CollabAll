@@ -58,6 +58,13 @@
                             constraints: true,
                             foreignKeyConstraint: true
                         });
+                        user.hasMany(models.message, {
+                            as: 'User',
+                            onDelete: 'CASCADE',
+                            foreignKey: {allowNull: false},
+                            constraints: true,
+                            foreignKeyConstraint: true
+                        });
                     }
                 },
                 instanceMethods: {

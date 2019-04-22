@@ -5,6 +5,7 @@ import * as moment from 'moment';
 
 import { GroupService, UserService, SpeechService } from '../../shared';
 import { environment } from '../../../environments/environment';
+import { MessageService } from '../../shared/services/message.service';
 
 @Component({
     selector: 'group-chat',
@@ -44,7 +45,8 @@ export class GroupChatComponent {
         private router: Router,
         private groupService: GroupService,
         private userService: UserService,
-        public speechService: SpeechService
+        public speechService: SpeechService,
+        private messageService: MessageService
     ) { }
 
     ngOnInit() {
@@ -60,6 +62,16 @@ export class GroupChatComponent {
                         .subscribe(
                             data => {
                                 this.group = data.group;
+                            },
+                            err => {
+                                console.log(err);
+                            }
+                        );
+
+                    this.messageService.getMessagesByGroup(this.groupID)
+                        .subscribe(
+                            data => {
+                                this.messages = data.messages;
                             },
                             err => {
                                 console.log(err);
@@ -99,6 +111,8 @@ export class GroupChatComponent {
         this.socket = io.connect(this.url, { query: this.user.ID });
 
         this.socket.on('connect', (msg) => {
+            // load the list of old messages from the db
+
             this.socket.emit('join', this.user.ID);
         });
 
@@ -167,7 +181,7 @@ export class GroupChatComponent {
         if (message.body.includes !== undefined && message.body.includes('Discussing:')) {
             this.currentCard = message.body.replace('Discussing:', '');
         }
-        
+
         if (this.user.FirstName + ' ' + this.user.LastName !== message.user && message.body.Title !== undefined) {
             sound.play();
             console.log('sound played');
@@ -178,6 +192,7 @@ export class GroupChatComponent {
         let action = {
             body: interjection,
             user: this.user.FirstName + ' ' + this.user.LastName,
+            userID: this.user.ID,
             userAvatar: this.user.Avatar,
             groupID: this.groupID,
             timestamp: moment(moment.now()).format(this.timeStampFormat)
@@ -191,6 +206,7 @@ export class GroupChatComponent {
         let action = {
             body: message,
             user: `${this.user.FirstName} ${this.user.LastName}`,
+            userID: this.user.ID,
             userAvatar: this.user.Avatar,
             groupID: this.groupID,
             timestamp: moment(moment.now()).format(this.timeStampFormat)
@@ -204,6 +220,7 @@ export class GroupChatComponent {
             let action = {
                 body: this.chatMessage,
                 user: this.user.FirstName + ' ' + this.user.LastName,
+                userID: this.user.ID,
                 userAvatar: this.user.Avatar,
                 groupID: this.groupID,
                 timestamp: moment(moment.now()).format(this.timeStampFormat)
@@ -219,6 +236,7 @@ export class GroupChatComponent {
         let action = {
             body: 'Communicating!',
             user: this.user.FirstName + ' ' + this.user.LastName,
+            userID: this.user.ID,
             userAvatar: this.user.Avatar,
             groupID: this.groupID,
             timestamp: moment(moment.now()).format(this.timeStampFormat)
@@ -236,6 +254,7 @@ export class GroupChatComponent {
         let action = {
             body: 'Discussing: ' + result.Title,
             user: this.user.FirstName + ' ' + this.user.LastName,
+            userID: this.user.ID,
             userAvatar: this.user.Avatar,
             groupID: this.groupID,
             timestamp: moment(moment.now()).format(this.timeStampFormat)
@@ -266,6 +285,7 @@ export class GroupChatComponent {
         let action = {
             body: result,
             user: this.user.FirstName + ' ' + this.user.LastName,
+            userID: this.user.ID,
             userAvatar: this.user.Avatar,
             groupID: this.groupID,
             timestamp: moment(moment.now()).format(this.timeStampFormat)

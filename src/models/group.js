@@ -35,6 +35,13 @@
                             constraints: true,
                             foreignKeyConstraint: true
                         });
+                        group.hasMany(models.message, {
+                            as: 'Group',
+                            onDelete: 'CASCADE',
+                            foreignKey: {allowNull: false},
+                            constraints: true,
+                            foreignKeyConstraint: true
+                        });
                     }
                 }
             }

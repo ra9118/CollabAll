@@ -36,6 +36,7 @@ import {
   HttpTokenInterceptor,
   SpeechService
 } from './shared';
+import { MessageService } from './shared/services/message.service';
 
 @NgModule({
   declarations: [
@@ -73,6 +74,7 @@ import {
     JwtService,
     UserService,
     SpeechService,
+    MessageService,
     HttpClientModule
   ],
   bootstrap: [AppComponent]
