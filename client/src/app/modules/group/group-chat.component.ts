@@ -45,7 +45,7 @@ export class GroupChatComponent {
         private router: Router,
         private groupService: GroupService,
         private userService: UserService,
-        public speechService: SpeechService
+        public speechService: SpeechService,
         private messageService: MessageService
     ) { }
 
