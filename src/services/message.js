@@ -45,7 +45,7 @@
             var userId = request.body.userID;
             var body = request.body.body;
             return MessageModel.create({
-                Body: JSON.stringify(response.body),
+                Body: body,
                 groupID: groupId,
                 userID: userId,
                 IsActive: true
