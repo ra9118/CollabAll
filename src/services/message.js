@@ -22,7 +22,21 @@
                 },
                 include: [UserModel, GroupModel]
             }).then(function (data) {
-                response.send({success: true, messages: data});
+                console.log(data)
+                let data2 = []
+                data.map(dat => {
+                    console.log(dat.user)
+                    data2.push({
+                        body: dat.Body,
+                        user: dat.user.FirstName + ' ' + dat.user.LastName,
+                        userID: dat.user.ID,
+                        userAvatar: '',
+                        groupID: dat.group.ID,
+                        timestamp: dat.createdAt
+                    })
+                })
+                console.log(data2)
+                response.send({success: true, messages: data2});
             });
         },
 
@@ -31,7 +45,7 @@
             var userId = request.body.userID;
             var body = request.body.body;
             return MessageModel.create({
-                Body: body,
+                Body: JSON.stringify(response.body),
                 groupID: groupId,
                 userID: userId,
                 IsActive: true
