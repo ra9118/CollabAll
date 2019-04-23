@@ -50,12 +50,12 @@
                 var groupId = request.body.GroupId;
                 return GroupInterjectionModel.bulkCreate([
                     {groupID:groupId, Position:0, Title: 'Slow Down!', Description: 'Slow Down!', Icon:'fa fa-stop', BackgroundColor:'#5bc0de',TextColor:'#fff',IncludeCaptionist:true,IncludeInterpreter:true,IsActive:true,Sound:'beep-07'},
-                    {groupID:groupId, Position:1, Title: 'Done Communicating!', Description: 'Done Communicating!', Icon:'fa fa-thumbs-o-up', BackgroundColor:'#BF5FFF',TextColor:'#fff',IncludeCaptionist:true,IncludeInterpreter:true,IsActive:true,Sound:'beep-07'},
+                    {groupID:groupId, Position:1, Title: 'I am Done Communicating!', Description: 'I am Done Communicating!', Icon:'fa fa-check-circle-o', BackgroundColor:'#BF5FFF',TextColor:'#fff',IncludeCaptionist:true,IncludeInterpreter:true,IsActive:true,Sound:'beep-07'},
                     {groupID:groupId, Position:2, Title: 'Question!', Description: 'Question!', Icon:'fa fa-question', BackgroundColor:'#f0ad4e',TextColor:'#fff',IncludeCaptionist:true,IncludeInterpreter:true,IsActive:true, Sound:'beep-07'},
                     {groupID:groupId, Position:3, Title: 'Repeat!', Description: 'Question!', Icon:'fa fa-repeat', BackgroundColor:'#3ca2e0',TextColor:'#fff',IncludeCaptionist:true,IncludeInterpreter:true,IsActive:true, Sound:'beep-07'},
                     {groupID:groupId, Position:4, Title: 'Don\'t Understand!', Description: 'Don\'t Understand!', Icon:'fa fa-exclamation', BackgroundColor:'#AEB6BF',TextColor:'#fff',IncludeCaptionist:true,IncludeInterpreter:true,IsActive:true, Sound:'beep-07'},
-                    {groupID:groupId, Position:5, Title: 'Agree!', Description: 'Agree!', Icon:'fa fa-smile-o', BackgroundColor:'#229954',TextColor:'#fff',IncludeCaptionist:true,IncludeInterpreter:true,IsActive:true,Sound:'beep-07'},
-                    {groupID:groupId, Position:6, Title: 'Disagree!', Description: 'Disagree!', Icon:'fa fa-frown-o', BackgroundColor:'#C70039  ',TextColor:'#fff',IncludeCaptionist:true,IncludeInterpreter:true,IsActive:true,Sound:'beep-07'},
+                    {groupID:groupId, Position:5, Title: 'Agree!', Description: 'Agree!', Icon:'fa fa-thumbs-o-up', BackgroundColor:'#229954',TextColor:'#fff',IncludeCaptionist:true,IncludeInterpreter:true,IsActive:true,Sound:'beep-07'},
+                    {groupID:groupId, Position:6, Title: 'Disagree!', Description: 'Disagree!', Icon:'fa fa-thumbs-o-down', BackgroundColor:'#C70039  ',TextColor:'#fff',IncludeCaptionist:true,IncludeInterpreter:true,IsActive:true,Sound:'beep-07'},
                 ]).then(function (data) {
                     response.send({success: true, interjection: data});
                 });
