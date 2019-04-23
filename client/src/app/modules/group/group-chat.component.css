@@ -1,6 +1,6 @@
 .messages {
     overflow-y: scroll;
-    height: 300px;
+    height: 360px;
 }
 
 .message-group {
@@ -52,11 +52,11 @@
 }
 
 .recorder {
-    margin: 0 auto; 
-    width: 50px; 
-    height: 50px; 
+    margin: 0 auto;
+    width: 50px;
+    height: 50px;
     display: flex;
-    justify-content: center; 
+    justify-content: center;
     align-items: center;
     transition: all .3s ease-in-out;
     cursor: pointer;

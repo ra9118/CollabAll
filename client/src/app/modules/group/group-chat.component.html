@@ -58,21 +58,23 @@
                 </div>
 
                 <div class="row mt-3 mb-3">
-                    <div class="col">
+                    <div class="col-1">
+                        <!-- Start of STT -->
+                        <span *ngIf='speechService.available' class='recorder input-group' [class]='speechService.started ? "recorder recording" : "recorder"' (click)="startStt()" [ngbTooltip]="speechService.started ? 'Stop' : 'Click here to send your voice as text'">
+                            <fa [class]='speechService.started ? "recorder-icon icon-recording" : "recorder-icon"' [name]='speechService.started ? "stop" :  "microphone"' size='1'></fa>
+                        </span>
+                        <span *ngIf='!speechService.available' class='recorder input-group' ngbTooltip="Speech recognition is only available on Chrome">
+                            <fa class='recorder-icon' name='microphone-slash' size='1'></fa>
+                        </span>
+                        <!-- End of STT -->
+                    </div>
+                    <div class="col col-sm-11">
                         <form (ngSubmit)="sendMessage()">
                             <div class="input-group">
-                                <!-- Start of STT -->
-                                <div *ngIf='recording.available' class='recorder' [class]='recording.started ? "recorder recording" : "recorder"' (click)="startStt()" [ngbTooltip]="recording.started ? 'Stop' : 'Click here to send your voice as text'">
-                                    <fa [class]='recording.started ? "recorder-icon icon-recording" : "recorder-icon"' [name]='recording.started ? "stop" :  "microphone"' size='1'></fa>
-                                </div>
-                                <div *ngIf='!recording.available' class='recorder' ngbTooltip="Speech recognition is only available on Chrome">
-                                    <fa class='recorder-icon' name='microphone-slash' size='1'></fa>
-                                </div>
-                                <!-- End of STT -->
-                                <input type="text" class="form-control" [(ngModel)]="chatMessage" name="chatMessage" placeholder="{{recording.chatPlaceholder}}" autocomplete="on"
+                                <input type="text" class="form-control" [(ngModel)]="chatMessage" name="chatMessage" placeholder="{{speechService.chatPlaceholder}}" autocomplete="off" (focus)="speechService.started ? startStt() : null"
                                 />
                                 <div class="input-group-append">
-                                    <button class="btn btn-primary" type="submit">Send</button>
+                                    <button [class]="speechService.started ? 'btn btn-secondary': 'btn btn-primary'" type="submit">Send</button>
                                 </div>
                             </div>
                         </form>
@@ -80,6 +82,11 @@
                 </div>
             </div>
             <div class="col-3">
+                <button class="btn btn-primary btn-block" type="submit" (click)="print()">
+                  <i class="fa fa-download"></i> &nbsp;
+                  Download Transcript</button>
+                <br />
+
                 <div class="card users">
                     <div class="card-header">Group Users</div>
                     <ul class="list-group list-group-flush">
@@ -89,6 +96,7 @@
             </div>
         </div>
 
+        <br/>
         <div class="row">
             <div class="col-3" *ngFor="let interjection of groupInterjections">
                 <button class="btn btn-block" [ngStyle]="{ 'margin': '5px', 'background-color': interjection.BackgroundColor, 'color': interjection.TextColor }"

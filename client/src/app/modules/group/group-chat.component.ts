@@ -3,8 +3,9 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import * as io from 'socket.io-client';
 import * as moment from 'moment';
 
-import { GroupService, UserService } from '../../shared';
+import { GroupService, UserService, SpeechService } from '../../shared';
 import { environment } from '../../../environments/environment';
+import { MessageService } from '../../shared/services/message.service';
 
 @Component({
     selector: 'group-chat',
@@ -24,24 +25,18 @@ export class GroupChatComponent {
     groupUsers = [];
     groupCards = [];
     groupInterjections = [];
-    recording = {
-        available: false,
-        recognitionService: null,
-        started: false,
-        chatPlaceholder: 'chat'
-    }
     messages = [];
     currentCommunicator = 'None';
     currentCard = 'None';
 
     communicateInterjection = {
-        Title: "Communicating!",
-        Icon: "fa fa-microphone",
-        BackgroundColor: "#449d44",
+        Title: "I am Communicating!",
+        Icon: "fa fa-commenting-o",
+        BackgroundColor: "#F1948A",
         TextColor: "#ffffff"
     };
 
-    timeStampFormat = 'MM-DD-YY hh:mm:ss';
+    timeStampFormat = 'MM-DD-YY HH:mm:ss';
 
     chatMessage = '';
 
@@ -49,18 +44,13 @@ export class GroupChatComponent {
         private route: ActivatedRoute,
         private router: Router,
         private groupService: GroupService,
-        private userService: UserService
+        private userService: UserService,
+        public speechService: SpeechService,
+        private messageService: MessageService
     ) { }
 
     ngOnInit() {
-        if((<any>window).webkitSpeechRecognition) {
-            this.recording.available = true;
-            this.recording.recognitionService = new (<any>window).webkitSpeechRecognition()
-            this.recording.started = false;
-        }
-        else{
-            this.recording.available = false
-        }
+        this.speechService.checkAvailability()
         this.groupID = this.route.snapshot.params['id'];
         this.groupService.getGroupMembers(this.groupID)
             .subscribe(
@@ -72,6 +62,16 @@ export class GroupChatComponent {
                         .subscribe(
                             data => {
                                 this.group = data.group;
+                            },
+                            err => {
+                                console.log(err);
+                            }
+                        );
+
+                    this.messageService.getMessagesByGroup(this.groupID)
+                        .subscribe(
+                            data => {
+                                this.messages = data.messages;
                             },
                             err => {
                                 console.log(err);
@@ -111,6 +111,8 @@ export class GroupChatComponent {
         this.socket = io.connect(this.url, { query: this.user.ID });
 
         this.socket.on('connect', (msg) => {
+            // load the list of old messages from the db
+
             this.socket.emit('join', this.user.ID);
         });
 
@@ -123,52 +125,38 @@ export class GroupChatComponent {
         });
     }
 
-    addToPlaceholder(text: string) {
-        this.recording.chatPlaceholder = text
+
+    onResult = (event) => {
+        console.log(event)
+        if(event.results[event.results.length - 1].isFinal){
+            this.sendStt(event.results[event.results.length - 1][0].transcript)
+        }
+        else{
+            console.log(event.results[event.results.length - 1][0].transcript)
+        }
     }
 
     startStt(){
-        if(this.recording.available && this.recording.started){
-            this.recording.recognitionService.stop();
-            this.recording.started = false;
-            return
+        if(this.speechService.started){
+            this.speechService.DestroySpeechObject()
         }
-        if(this.recording.available) {
-            this.recording.recognitionService.continuous = true
-            this.recording.recognitionService.interimResults = true
-            this.recording.recognitionService.onaudiostart = (start) => {
-                console.log('started recording')
-            }
-
-            this.recording.recognitionService.onspeechend = () => {
-                if(this.recording.started){
-                    this.recording.recognitionService.stop();
-                    this.recording.started = false;
-                }
-                else{
-                    this.recording.recognitionService.stop();
-                }
-            }
-
-            this.recording.recognitionService.onerror = (error) => {
-                console.log('Error, ', error)
-            }
-
-            this.recording.recognitionService.onresult = (event) => {
-                if(event.results[event.results.length - 1].isFinal){
-                    this.sendStt(event.results[event.results.length - 1][0].transcript)
-                }
-                else{
-                    console.log(event.results[event.results.length - 1][0].transcript)
-                }
-            }
+        else {
+            this.speechService.record()
+            .subscribe(value => {
+                if(value)
+                    this.sendStt(value)
+            }, error => {
+                console.log(error)
+            }, () => {
+                console.log('done')
+            })
         }
-        this.recording.recognitionService.start()
-        this.recording.started = true
+
         console.log('stt starts here')
     }
 
     ngOnDestroy() {
+        this.speechService.DestroySpeechObject()
         this.socket.emit('unsubscribe', { group: this.groupID });
     }
 
@@ -193,7 +181,7 @@ export class GroupChatComponent {
         if (message.body.includes !== undefined && message.body.includes('Discussing:')) {
             this.currentCard = message.body.replace('Discussing:', '');
         }
-        
+
         if (this.user.FirstName + ' ' + this.user.LastName !== message.user && message.body.Title !== undefined) {
             sound.play();
             console.log('sound played');
@@ -204,6 +192,7 @@ export class GroupChatComponent {
         let action = {
             body: interjection,
             user: this.user.FirstName + ' ' + this.user.LastName,
+            userID: this.user.ID,
             userAvatar: this.user.Avatar,
             groupID: this.groupID,
             timestamp: moment(moment.now()).format(this.timeStampFormat)
@@ -217,6 +206,7 @@ export class GroupChatComponent {
         let action = {
             body: message,
             user: `${this.user.FirstName} ${this.user.LastName}`,
+            userID: this.user.ID,
             userAvatar: this.user.Avatar,
             groupID: this.groupID,
             timestamp: moment(moment.now()).format(this.timeStampFormat)
@@ -230,6 +220,7 @@ export class GroupChatComponent {
             let action = {
                 body: this.chatMessage,
                 user: this.user.FirstName + ' ' + this.user.LastName,
+                userID: this.user.ID,
                 userAvatar: this.user.Avatar,
                 groupID: this.groupID,
                 timestamp: moment(moment.now()).format(this.timeStampFormat)
@@ -245,6 +236,7 @@ export class GroupChatComponent {
         let action = {
             body: 'Communicating!',
             user: this.user.FirstName + ' ' + this.user.LastName,
+            userID: this.user.ID,
             userAvatar: this.user.Avatar,
             groupID: this.groupID,
             timestamp: moment(moment.now()).format(this.timeStampFormat)
@@ -262,6 +254,7 @@ export class GroupChatComponent {
         let action = {
             body: 'Discussing: ' + result.Title,
             user: this.user.FirstName + ' ' + this.user.LastName,
+            userID: this.user.ID,
             userAvatar: this.user.Avatar,
             groupID: this.groupID,
             timestamp: moment(moment.now()).format(this.timeStampFormat)
@@ -292,6 +285,7 @@ export class GroupChatComponent {
         let action = {
             body: result,
             user: this.user.FirstName + ' ' + this.user.LastName,
+            userID: this.user.ID,
             userAvatar: this.user.Avatar,
             groupID: this.groupID,
             timestamp: moment(moment.now()).format(this.timeStampFormat)
@@ -319,5 +313,32 @@ export class GroupChatComponent {
         }
 
         return (string.indexOf(substring) > -1);
+    }
+
+    print(){
+      let popupWinindow;
+      popupWinindow = window.open('', '_blank', 'width=1000,height=700,scrollbars=no,menubar=no,toolbar=no,location=no,status=no,titlebar=no');
+          popupWinindow.document.open();
+
+          var messagesHtml = '';
+
+          this.messages.forEach(function(message) {
+            var tempHtml = `<div class="message">
+              <div><b>(${message.timestamp}) ${message.user}:</b></div>
+              <div><span>${message.body}</span></div>
+              <br/>
+            </div>`;
+            messagesHtml += tempHtml;
+          });
+
+
+          popupWinindow.document.write(
+            `<html>
+              <head></head>
+              <body onload="window.print()">
+                ${messagesHtml}
+              </body>
+            </html>`);
+          popupWinindow.document.close();
     }
 }
