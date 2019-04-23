@@ -35,7 +35,7 @@ export class GroupChatComponent {
     currentCard = 'None';
 
     communicateInterjection = {
-        Title: "Communicating!",
+        Title: "I am Communicating!",
         Icon: "fa fa-commenting-o",
         BackgroundColor: "#F1948A",
         TextColor: "#ffffff"
