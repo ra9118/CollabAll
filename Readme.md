@@ -3,6 +3,8 @@
 ## About
 CollabAll is a meetings app powered by interjections and Voice Recognition made to help deaf or hard of hearing students to participate and lead a team meeting. 
 
+The original contribution history of this project can be found at: https://github.com/dkaushik95/CollabAll
+
 ## Prerequisites
 - NodeJS
 - Yarn
