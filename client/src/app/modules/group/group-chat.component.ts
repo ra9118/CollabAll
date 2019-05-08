@@ -322,7 +322,6 @@ export class GroupChatComponent {
 
           var messagesHtml = '';
           this.messages.forEach(function(message) {
-            console.log(message.body)
             var tempHtml = `<div class="message">
               <div><b>(${message.timestamp}) ${message.user}:</b></div>
               <div><span>${message.body.Title || message.body}</span></div>
