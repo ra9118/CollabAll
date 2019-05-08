@@ -321,11 +321,11 @@ export class GroupChatComponent {
           popupWinindow.document.open();
 
           var messagesHtml = '';
-
           this.messages.forEach(function(message) {
+            console.log(message.body)
             var tempHtml = `<div class="message">
               <div><b>(${message.timestamp}) ${message.user}:</b></div>
-              <div><span>${message.body}</span></div>
+              <div><span>${message.body.Title || message.body}</span></div>
               <br/>
             </div>`;
             messagesHtml += tempHtml;
