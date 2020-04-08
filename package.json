@@ -37,6 +37,7 @@
     "sequelize": "^3.30.2",
     "sequelize-cli": "^2.5.1",
     "socket.io": "^1.7.3",
-    "sqlite3": "^4.0.6"
+    "sqlite3": "^4.0.6",
+    "yarm": "^0.4.0"
   }
 }

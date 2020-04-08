@@ -2,6 +2,7 @@
         'use strict';
 
         var db = require('../models/index');
+        let https = require ('https');
 
         var GroupInterjectionModel = db.group_interjection;
         var GroupModel = db.group;
@@ -9,6 +10,7 @@
 
         var init = function (router) {
             router.get('/get-interjections-for-group', endpoints.getGroupInterjections);
+            router.get('/get-auto-suggest-for-group', endpoints.getAutoSuggest);
             router.get('/get-interjection-by-id-for-group', endpoints.getGroupInterjectionById);
             router.post('/create-interjections-for-group', endpoints.createGroupInterjection);
             router.post('/update-interjections-for-group', endpoints.updateGroupInterjection);
@@ -31,6 +33,71 @@
                 }).then(function (data) {
                     response.send({success: true, interjections: data});
                 });
+            },
+
+            getAutoSuggest: function (request, responseOuter) {
+                let searchQuery = request.query.searchQuery;
+
+                console.log("=========== getAutosuggests1 ===============");
+                console.log(searchQuery);
+
+                let obj='';
+
+                let subscriptionKey = 'bb43790371de49c7851a968e2808977d';
+                let host = 'collaballautosuggest.cognitiveservices.azure.com';
+                let path = '/bing/v7.0/Suggestions';
+                let mkt = 'en-US';
+                let params = '?mkt=' + mkt + '&q=' + encodeURI(searchQuery);
+                let request_params = {
+                    method : 'GET',
+                    hostname : host,
+                    path :  path + params,
+                    headers : {
+                        'Ocp-Apim-Subscription-Key' : subscriptionKey,
+                    }
+                };
+                let req = https.request(request_params,
+                    function (response) {
+                        let body = '';
+
+                        response.on ('data', function (d) {
+                            body += d;
+                        });
+
+                        response.on('end',function(){
+                            obj = JSON.parse(body);
+                            console.log("=========== response end ===============");
+                            console.log(obj);
+
+                            let recomendedList =[];
+                            if(obj!=''){
+
+                                obj.suggestionGroups.forEach(function(value) {
+                                    for( let index in value.searchSuggestions){
+                                        console.log(value.searchSuggestions[index].displayText );
+                                        console.log(value.searchSuggestions[index].url );
+                                        recomendedList.push(value.searchSuggestions[index].displayText)
+                                        console.log("====");
+                                    }
+                                });
+                            }else{
+                                console.log('no object =========>');
+                            }
+
+                            console.log(recomendedList);
+                            responseOuter.send({success: true, autoSuggestList: recomendedList});
+
+                        });
+
+                        response.on ('error', function (e) {
+                            console.log ('Error: ' + e.message);
+                        });
+                    }
+                   );
+
+                req.end();
+
+
             },
 
             getGroupInterjectionById: function (request, response) {
