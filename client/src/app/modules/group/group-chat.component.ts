@@ -73,7 +73,7 @@ export class GroupChatComponent {
                     this.messageService.getMessagesByGroup(this.groupID)
                         .subscribe(
                             data => {
-                                this.messages = data.messages;
+                                this.messages = data.messages.filter(message => !this.doesItStartWith(message.body, '!'));
                             },
                             err => {
                                 console.log(err);
@@ -130,6 +130,18 @@ export class GroupChatComponent {
         });
     }
 
+    handleFocus(){
+        this.chatMessage="!typing";
+        this.sendMessage();
+        if(this.speechService.started){
+            this.startStt();
+        }
+    }
+
+    removedFocus(){
+        this.chatMessage="!doneTyping";
+        this.sendMessage();
+    }
 
     onResult = (event) => {
         console.log(event);
@@ -153,10 +165,14 @@ export class GroupChatComponent {
                 console.log(error);
             }, () => {
                 console.log('done');
+                this.chatMessage="!doneSpeaking";
+                this.sendMessage();
             });
         }
 
         console.log('stt starts here');
+        this.chatMessage="!speaking";
+        this.sendMessage();
     }
 
     ngOnDestroy() {
@@ -176,10 +192,21 @@ export class GroupChatComponent {
         } else {
             sound = document.getElementById(message.body.Sound);
         }
-        this.messages.push(message);
-
-        if (message.body.includes === undefined && message.body.Title === 'Communicating!') {
+        if (message.body === '!typing' || message.body === '!speaking'){
             this.currentCommunicator = message.user;
+        } 
+        else if (message.body === '!doneTyping' || message.body === '!doneSpeaking') {
+            this.currentCommunicator = 'None'
+        } else {
+            this.messages.push(message);
+        }
+
+        if (message.body.Title === "I am Communicating!") {
+            this.currentCommunicator = message.user;
+        }
+        
+        if (message.body.Title === 'I am Done Communicating!') {
+            this.currentCommunicator = "None";
         }
 
         if (message.body.includes !== undefined && message.body.includes('Discussing:')) {
