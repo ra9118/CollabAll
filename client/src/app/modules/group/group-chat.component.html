@@ -60,7 +60,7 @@
                 <div class="row mt-3 mb-3">
                     <div class="col-1">
                         <!-- Start of STT -->
-                        <span *ngIf='speechService.available' class='recorder input-group' [class]='speechService.started ? "recorder recording" : "recorder"' (click)="startStt()" [ngbTooltip]="speechService.started ? 'Stop' : 'Click here to send your voice as text'">
+                        <span *ngIf='speechService.available' class='recorder input-group' [class]='speechService.started ? "recorder recording" : "recorder"' (click)="startStt()" [ngbTooltip]="speechService.started ? 'Stop' : 'Click here to send your voice as text'" on-focus="handleFocus()" on-focusout="removedFocus()">
                             <fa [class]='speechService.started ? "recorder-icon icon-recording" : "recorder-icon"' [name]='speechService.started ? "stop" :  "microphone"' size='1'></fa>
                         </span>
                         <span *ngIf='!speechService.available' class='recorder input-group' ngbTooltip="Speech recognition is only available on Chrome">
@@ -74,7 +74,7 @@
                     <div class="col col-sm-11">
                         <form (ngSubmit)="sendMessage()">
                             <div class="input-group">
-                                <input type="text" class="form-control" [(ngModel)]="chatMessage" name="chatMessage" placeholder="{{speechService.chatPlaceholder}}" autocomplete="off" (focus)="speechService.started ? startStt() : null"
+                                <input type="text" class="form-control" [(ngModel)]="chatMessage" name="chatMessage" placeholder="{{speechService.chatPlaceholder}}" autocomplete="off" on-focus="handleFocus()" on-focusout="removedFocus()"
                                        (click)="changeTextAutoSuggest()" />
                                 <div class="input-group-append">
                                     <button [class]="speechService.started ? 'btn btn-secondary': 'btn btn-primary'" type="submit">Send</button>
