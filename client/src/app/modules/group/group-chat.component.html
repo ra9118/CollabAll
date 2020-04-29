@@ -65,23 +65,35 @@
                         </span>
                         <span *ngIf='!speechService.available' class='recorder input-group' ngbTooltip="Speech recognition is only available on Chrome">
                             <fa class='recorder-icon' name='microphone-slash' size='1'></fa>
+
                         </span>
+
                         <!-- End of STT -->
                     </div>
+
                     <div class="col col-sm-11">
                         <form (ngSubmit)="sendMessage()">
                             <div class="input-group">
-                                <!-- This needs on focus or when not empty -->
                                 <input type="text" class="form-control" [(ngModel)]="chatMessage" name="chatMessage" placeholder="{{speechService.chatPlaceholder}}" autocomplete="off" on-focus="handleFocus()" on-focusout="removedFocus()"
-                                />
+                                       (click)="changeTextAutoSuggest()" />
                                 <div class="input-group-append">
                                     <button [class]="speechService.started ? 'btn btn-secondary': 'btn btn-primary'" type="submit">Send</button>
+
                                 </div>
+
                             </div>
                         </form>
+
                     </div>
+                  <div class="col col-sm-11" >
+
+                    <ul  *ngFor="let suggest of autoSuggestList" >
+                      <li class="col col-sm-3" class="btn btn-success" (click)="copySuggest(suggest)">{{ suggest }} </li>
+                    </ul>
+                  </div>
                 </div>
             </div>
+
             <div class="col-3">
                 <button class="btn btn-primary btn-block" type="submit" (click)="print()">
                   <i class="fa fa-download"></i> &nbsp;
@@ -110,6 +122,8 @@
     </div>
 </div>
 
+
+
 <div class="card mt-3">
     <div class="card-body">
         <h5 class="card-title">Discussion Cards</h5>
@@ -130,6 +144,7 @@
         </div>
     </div>
 </div>
+
 
 <audio id="button-09" src="assets/sounds/button-09.wav" autostart="false"></audio>
 <audio id="button-37" src="assets/sounds/button-37.wav" autostart="false"></audio>

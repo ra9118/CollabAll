@@ -21,23 +21,25 @@ export class GroupChatComponent {
     group = {
         Name: ''
     };
+
     groupID = 0;
     groupUsers = [];
     groupCards = [];
     groupInterjections = [];
+    autoSuggestList = [];
     messages = [];
     currentCommunicator = 'None';
     currentCard = 'None';
 
     communicateInterjection = {
-        Title: "I am Communicating!",
-        Icon: "fa fa-commenting-o",
-        BackgroundColor: "#F1948A",
-        TextColor: "#ffffff"
+        Title: 'I am Communicating!',
+        Icon: 'fa fa-commenting-o',
+        BackgroundColor: '#F1948A',
+        TextColor: '#ffffff'
     };
 
     timeStampFormat = 'MM-DD-YY HH:mm:ss';
-
+    searchQuery = 'covid';
     chatMessage = '';
 
     constructor(
@@ -50,7 +52,7 @@ export class GroupChatComponent {
     ) { }
 
     ngOnInit() {
-        this.speechService.checkAvailability()
+        this.speechService.checkAvailability();
         this.groupID = this.route.snapshot.params['id'];
         this.groupService.getGroupMembers(this.groupID)
             .subscribe(
@@ -87,6 +89,9 @@ export class GroupChatComponent {
                                 console.log(err);
                             }
                         );
+
+
+
 
                     this.groupService.getInterjectionsForGroup(this.groupID)
                         .subscribe(
@@ -125,17 +130,6 @@ export class GroupChatComponent {
         });
     }
 
-
-    onResult = (event) => {
-        console.log(event)
-        if(event.results[event.results.length - 1].isFinal){
-            this.sendStt(event.results[event.results.length - 1][0].transcript)
-        }
-        else{
-            console.log(event.results[event.results.length - 1][0].transcript)
-        }
-    }
-
     handleFocus(){
         this.chatMessage="!typing";
         this.sendMessage();
@@ -149,31 +143,40 @@ export class GroupChatComponent {
         this.sendMessage();
     }
 
-    startStt(){
-        if(this.speechService.started){
-            this.speechService.DestroySpeechObject()
+    onResult = (event) => {
+        console.log(event);
+        if (event.results[event.results.length - 1].isFinal) {
+            this.sendStt(event.results[event.results.length - 1][0].transcript);
+        } else {
+            console.log(event.results[event.results.length - 1][0].transcript);
         }
-        else {
+    }
+
+    startStt() {
+        if (this.speechService.started) {
+            this.speechService.DestroySpeechObject();
+        } else {
             this.speechService.record()
             .subscribe(value => {
-                if(value)
-                    this.sendStt(value)
+                if (value) {
+                    this.sendStt(value);
+                }
             }, error => {
-                console.log(error)
+                console.log(error);
             }, () => {
-                console.log('done')
+                console.log('done');
                 this.chatMessage="!doneSpeaking";
                 this.sendMessage();
-            })
+            });
         }
 
-        console.log('stt starts here')
+        console.log('stt starts here');
         this.chatMessage="!speaking";
         this.sendMessage();
     }
 
     ngOnDestroy() {
-        this.speechService.DestroySpeechObject()
+        this.speechService.DestroySpeechObject();
         this.socket.emit('unsubscribe', { group: this.groupID });
     }
 
@@ -201,7 +204,7 @@ export class GroupChatComponent {
         if (message.body.Title === "I am Communicating!") {
             this.currentCommunicator = message.user;
         }
-
+        
         if (message.body.Title === 'I am Done Communicating!') {
             this.currentCommunicator = "None";
         }
@@ -217,7 +220,7 @@ export class GroupChatComponent {
     }
 
     issueInterjection(interjection) {
-        let action = {
+        const action = {
             body: interjection,
             user: this.user.FirstName + ' ' + this.user.LastName,
             userID: this.user.ID,
@@ -231,21 +234,22 @@ export class GroupChatComponent {
     }
 
     sendStt(message: string) {
-        let action = {
+        const action = {
             body: message,
             user: `${this.user.FirstName} ${this.user.LastName}`,
             userID: this.user.ID,
             userAvatar: this.user.Avatar,
             groupID: this.groupID,
             timestamp: moment(moment.now()).format(this.timeStampFormat)
-        }
-        this.appendChat(action)
-        this.emitChat(action)
+        };
+        this.appendChat(action);
+        this.emitChat(action);
     }
 
     sendMessage() {
+      this.autoSuggestList=[];
         if (this.chatMessage !== '') {
-            let action = {
+            const action = {
                 body: this.chatMessage,
                 user: this.user.FirstName + ' ' + this.user.LastName,
                 userID: this.user.ID,
@@ -261,7 +265,7 @@ export class GroupChatComponent {
     }
 
     communicate() {
-        let action = {
+        const action = {
             body: 'Communicating!',
             user: this.user.FirstName + ' ' + this.user.LastName,
             userID: this.user.ID,
@@ -275,11 +279,11 @@ export class GroupChatComponent {
     }
 
     discuss(cardID) {
-        let result = this.groupCards.find((d) => {
+        const result = this.groupCards.find((d) => {
             return d.ID === cardID;
         });
 
-        let action = {
+        const action = {
             body: 'Discussing: ' + result.Title,
             user: this.user.FirstName + ' ' + this.user.LastName,
             userID: this.user.ID,
@@ -310,7 +314,7 @@ export class GroupChatComponent {
                 break;
         }
 
-        let action = {
+        const action = {
             body: result,
             user: this.user.FirstName + ' ' + this.user.LastName,
             userID: this.user.ID,
@@ -343,17 +347,16 @@ export class GroupChatComponent {
         return (string.indexOf(substring) > -1);
     }
 
-    print(){
+    print() {
       let popupWinindow;
       popupWinindow = window.open('', '_blank', 'width=1000,height=700,scrollbars=no,menubar=no,toolbar=no,location=no,status=no,titlebar=no');
           popupWinindow.document.open();
 
-          var messagesHtml = '';
-
+          let messagesHtml = '';
           this.messages.forEach(function(message) {
-            var tempHtml = `<div class="message">
+            const tempHtml = `<div class="message">
               <div><b>(${message.timestamp}) ${message.user}:</b></div>
-              <div><span>${message.body}</span></div>
+              <div><span>${message.body.Title || message.body}</span></div>
               <br/>
             </div>`;
             messagesHtml += tempHtml;
@@ -369,4 +372,30 @@ export class GroupChatComponent {
             </html>`);
           popupWinindow.document.close();
     }
+
+   copySuggest(suggest) {
+      this.chatMessage = suggest;
+   }
+
+  changeTextAutoSuggest() {
+      if (this.chatMessage === '') {
+        return;
+      }
+
+    this.groupService.getAutoSuggestForGroup( this.chatMessage)
+      .subscribe(
+        data => {
+          this.autoSuggestList = data.autoSuggestList;
+          console.log('========= getAutosuggestForGroup============');
+          console.log(this.autoSuggestList);
+
+
+        },
+        err => {
+          console.log('========= Error getAutosuggestForGroup ============');
+          console.log(err);
+        }
+      );
+  }
+
 }
