@@ -128,6 +128,18 @@ export class GroupService {
             ));
     }
 
+    getAutoSuggestForGroup(searchQuery) {
+      return this.apiService.get('/services/interjection/get-auto-suggest-for-group?searchQuery=' + searchQuery)
+        .pipe(map(
+          data => {
+            return data;
+          },
+          err => {
+            return err;
+          }
+        ));
+    }
+
     setDefaultInterjectionsForGroup(id) {
         return this.apiService.post('/services/interjection/set-default-interjections-for-group', id)
             .pipe(map(
